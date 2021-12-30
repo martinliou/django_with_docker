@@ -1,0 +1,45 @@
+version: "3"
+services:
+  db:
+    image: postgres:13
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ui_test
+      POSTGRES_PASSWORD: G6NKG3o@G)bX29Ems=2@$d&LvKyMxNLJ
+      POSTGRES_DB: ui_test
+    ports:
+      - 5432:5432
+    volumes:
+      - ./database/users.sql:/docker-entrypoint-initdb.d/users.sql
+  web:
+    build: ./web
+    command: python web/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    environment:
+      POSTGRES_NAME: ui_test
+      POSTGRES_USER: ui_test
+      POSTGRES_PASSWORD: G6NKG3o@G)bX29Ems=2@$d&LvKyMxNLJ
+    depends_on:
+      - db
+  websocket:
+    build: ./websocket
+    command: python websocket/server.py
+    ports:
+      - 5566:5566
+    volumes:
+      - .:/ws
+    depends_on:
+      - web
+  nginx:
+    build: ./nginx
+    ports:
+      - 443:443
+    depends_on:
+      - web
+networks:
+  default:
+    driver: bridge

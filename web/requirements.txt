@@ -1,0 +1,8 @@
+django==3.0
+djangorestframework
+djangorestframework_simplejwt
+django-sorcery
+django-rest-enumfield
+websocket-client
+drf-yasg
+psycopg2>=2.8

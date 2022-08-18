@@ -41,7 +41,7 @@ class UserModelViewTests(TestCase):
         self.assertTrue('user_list' in test_response.context)
         self.assertEqual(test_response.context['user_list'][1].pk, 1)
         self.assertEqual(
-            test_response.context['user_list'][1].name, u'Sample Model Instance Name')
+            test_response.context['user_list'][1].name, u'User Model Instance Name')
 
     def test_user_view(self):
         """This tests the user-view view, ensuring that templates are loaded correctly.  
@@ -52,41 +52,41 @@ class UserModelViewTests(TestCase):
         self.assertTrue('user' in test_response.context)
         self.assertEqual(test_response.context['user'].pk, 1)
         self.assertEqual(
-            test_response.context['user'].name, u'Sample Model Instance Name')
+            test_response.context['user'].name, u'User Model Instance Name')
 
     def test_user_view_create(self):
         """This tests the user-new view, ensuring that templates are loaded correctly.  
         This view uses a user with superuser permissions so does not test the permission levels for this view."""
 
-        test_response = self.client.get('/user/create/')
+        test_response = self.client.post('/user/create/')
         self.assertEqual(test_response.status_code, 200)
 
     def test_user_view_edit(self):
         """This tests the user-edit view, ensuring that templates are loaded correctly.  
         This view uses a user with superuser permissions so does not test the permission levels for this view."""
 
-        test_response = self.client.get('/user/1/edit/')
+        test_response = self.client.put('/user/1/')
         self.assertEqual(test_response.status_code, 200)
         self.assertTrue('user' in test_response.context)
         self.assertEqual(test_response.context['user'].pk, 1)
         self.assertEqual(
-            test_response.context['user'].name, u'Sample Model Instance Name')
+            test_response.context['user'].name, u'User Model Instance Name')
 
         # verifies that a non-existent object returns a 404 error presuming there is no object with pk=2.
-        null_response = self.client.get('/user/2/edit/')
+        null_response = self.client.put('/user/2/')
         self.assertEqual(null_response.status_code, 404)
 
     def test_user_view_delete(self):
         """This tests the user-delete view, ensuring that templates are loaded correctly.  
         This view uses a user with superuser permissions so does not test the permission levels for this view."""
 
-        test_response = self.client.get('/user/1/delete/')
+        test_response = self.client.delete('/user/1/')
         self.assertEqual(test_response.status_code, 200)
         self.assertTrue('user' in test_response.context)
         self.assertEqual(test_response.context['user'].pk, 1)
         self.assertEqual(
-            test_response.context['user'].name, u'Sample Model Instance Name')
+            test_response.context['user'].name, u'User Model Instance Name')
 
         # verifies that a non-existent object returns a 404 error.
-        null_response = self.client.get('/user/1/delete/')
+        null_response = self.client.delete('/user/1/')
         self.assertEqual(null_response.status_code, 404)
